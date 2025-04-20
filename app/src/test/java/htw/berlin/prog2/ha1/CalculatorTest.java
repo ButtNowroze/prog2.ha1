@@ -106,6 +106,49 @@ class CalculatorTest {
         assertEquals(expected, actual);
     }
 
+    // Teilaufgabe 2a
+
+    @Test
+    @DisplayName("should keep latest operation and value after first clear key press")
+    void testSingleClearKeepsState() {
+        Calculator calc = new Calculator();
+
+        calc.pressDigitKey(8);
+        calc.pressBinaryOperationKey("+");
+        calc.pressDigitKey(3);
+        calc.pressClearKey(); // sollte nur Bildschirm löschen
+
+        calc.pressDigitKey(2);
+        calc.pressEqualsKey(); // Erwartung: 8 + 2 = 10
+
+        String expected = "10";
+        String actual = calc.readScreen();
+
+        assertEquals(expected, actual);
+    }
+
+    // Teilaufgabe 2b
+
+    @Test
+    @DisplayName("should repeat last addition when equals is pressed multiple times")
+    void testRepeatedEqualsKey() {
+        Calculator calc = new Calculator();
+
+        calc.pressDigitKey(2);
+        calc.pressBinaryOperationKey("+");
+        calc.pressDigitKey(3);
+        calc.pressEqualsKey(); // Ergebnis: 5
+
+        calc.pressEqualsKey(); // Erwartung: 5 + 3 = 8
+        calc.pressEqualsKey(); // Erwartung: 8 + 3 = 11
+
+        String expected = "11";
+        String actual = calc.readScreen();
+
+        assertEquals(expected, actual);
+    }
+
+
 
 
 }
