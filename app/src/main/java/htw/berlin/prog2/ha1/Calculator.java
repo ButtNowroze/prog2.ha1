@@ -44,11 +44,32 @@ public class Calculator {
      * Werte sowie der aktuelle Operationsmodus zurückgesetzt, so dass der Rechner wieder
      * im Ursprungszustand ist.
      */
+    
+    // Teilaufgabe 3a - Ueberarbeitete Methode
+    
     public void pressClearKey() {
-        screen = "0";
-        latestOperation = "";
-        latestValue = 0.0;
+        boolean clearPressedOnce = false;
+        if (!clearPressedOnce) {
+            screen = "0";
+            clearPressedOnce = true;
+        } else {
+            screen = "0";
+            latestOperation = "";
+            latestValue = 0.0;
+            clearPressedOnce = false;
+        }
     }
+
+    // Urspruengliche Methode
+
+    /*
+         public void pressClearKey() {
+            screen = "0";
+            latestOperation = "";
+            latestValue = 0.0;
+          }
+     */
+
 
     /**
      * Empfängt den Wert einer gedrückten binären Operationstaste, also eine der vier Operationen
@@ -59,10 +80,25 @@ public class Calculator {
      * auf dem Bildschirm angezeigt. Falls hierbei eine Division durch Null auftritt, wird "Error" angezeigt.
      * @param operation "+" für Addition, "-" für Substraktion, "x" für Multiplikation, "/" für Division
      */
-    public void pressBinaryOperationKey(String operation)  {
+
+    // Teilaufgabe 3b
+
+    private double lastOperand; // zweiter Operand merken
+    private boolean justEvaluated = false;
+
+    public void pressBinaryOperationKey(String operation) {
+        latestValue = Double.parseDouble(screen);
+        latestOperation = operation;
+        justEvaluated = false;
+    }
+
+    // Urspruengliche Klasse
+
+    /* public void pressBinaryOperationKey(String operation)  {
         latestValue = Double.parseDouble(screen);
         latestOperation = operation;
     }
+     */
 
     /**
      * Empfängt den Wert einer gedrückten unären Operationstaste, also eine der drei Operationen
@@ -117,7 +153,36 @@ public class Calculator {
      * Operation (ggf. inklusive letztem Operand) erneut auf den aktuellen Bildschirminhalt angewandt
      * und das Ergebnis direkt angezeigt.
      */
+
+    // Teilaufgabe 3c - Ueberarbeitete Methode
+
     public void pressEqualsKey() {
+        double currentValue = Double.parseDouble(screen);
+
+        if (!justEvaluated) {
+            lastOperand = currentValue;
+        }
+
+        double result = switch(latestOperation) {
+            case "+" -> latestValue + lastOperand;
+            case "-" -> latestValue - lastOperand;
+            case "x" -> latestValue * lastOperand;
+            case "/" -> lastOperand == 0 ? Double.POSITIVE_INFINITY : latestValue / lastOperand;
+            default -> throw new IllegalArgumentException();
+        };
+
+        screen = Double.toString(result);
+        if(screen.equals("Infinity")) screen = "Error";
+        if(screen.endsWith(".0")) screen = screen.substring(0,screen.length()-2);
+        if(screen.contains(".") && screen.length() > 11) screen = screen.substring(0, 10);
+
+        latestValue = result;
+        justEvaluated = true;
+    }
+
+    // Urspruengliche Methode
+
+    /* public void pressEqualsKey() {
         var result = switch(latestOperation) {
             case "+" -> latestValue + Double.parseDouble(screen);
             case "-" -> latestValue - Double.parseDouble(screen);
@@ -130,4 +195,6 @@ public class Calculator {
         if(screen.endsWith(".0")) screen = screen.substring(0,screen.length()-2);
         if(screen.contains(".") && screen.length() > 11) screen = screen.substring(0, 10);
     }
+     */
+
 }
