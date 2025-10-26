@@ -44,10 +44,23 @@ public class Calculator {
      * Werte sowie der aktuelle Operationsmodus zurückgesetzt, so dass der Rechner wieder
      * im Ursprungszustand ist.
      */
+
+    // Teilaufgabe 3a: Methode umgestaltet und hinzugefuegt/ Bugfix 1
+
+    private boolean clearPressedOnce = false;
+
     public void pressClearKey() {
-        screen = "0";
-        latestOperation = "";
-        latestValue = 0.0;
+        if (!clearPressedOnce) {
+            // nur Bildschirm zurücksetzen
+            screen = "0";
+            clearPressedOnce = true;
+        } else {
+            // alles zurücksetzen beim zweiten Drücken
+            screen = "0";
+            latestOperation = "";
+            latestValue = 0.0;
+            clearPressedOnce = false;
+        }
     }
 
     /**
@@ -117,7 +130,15 @@ public class Calculator {
      * Operation (ggf. inklusive letztem Operand) erneut auf den aktuellen Bildschirminhalt angewandt
      * und das Ergebnis direkt angezeigt.
      */
+
+    // Teilaufgabe 3b: Bugfix 2
+
     public void pressEqualsKey() {
+        if(latestOperation.isEmpty()) {
+            // keine Operation: nichts tun
+            return;
+        }
+    //Vorheriger Code
         var result = switch(latestOperation) {
             case "+" -> latestValue + Double.parseDouble(screen);
             case "-" -> latestValue - Double.parseDouble(screen);
