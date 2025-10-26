@@ -109,6 +109,7 @@ class CalculatorTest {
     }
 
     /**
+     * @author Nowroze Adel Butt
      * Loesung zu Teilaufgabe 02: Erster Test
      */
 
@@ -132,6 +133,7 @@ class CalculatorTest {
     }
 
     /**
+     * @Author Nowroze Adel Butt
      * Loesung zu Teilaufgabe 02: Zweiter Test
      */
 
@@ -148,5 +150,6 @@ class CalculatorTest {
 
         assertEquals(expected, actual);
     }
+
 }
 
